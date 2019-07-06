@@ -94,69 +94,73 @@ async def main():
             print("Error connecting to RPC server. Make sure you have enabled it in ~/Nano/config.json and check "
           "./sample_client.py --help")
 #        print(response2)
-#        try:
-        data = {}
-        data['timestamp'] = str(time.time())
-        data['confirmation_active'] = str(len(response2['confirmations']))
-        data['network_minimum'] = response['network_minimum']
-        data['network_current'] = response['network_current']
-        data['multiplier'] = response['multiplier']
-        data['difficulty_trend_min'] = str(min(map(float,response['difficulty_trend'])))
-        data['difficulty_trend_max'] = str(max(map(float,response['difficulty_trend'])))
-        data['difficulty_trend_median'] = str(statistics.median(map(float,response['difficulty_trend'])))
-        data['difficulty_trend_mean'] = str(statistics.mean(map(float,response['difficulty_trend'])))
-        data['difficulty_trend_mode'] = str(statistics.mode(map(float,response['difficulty_trend'])))
-        data['alarm_operations_count'] = response3['node']['alarm']['operations']['count']
-        data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
-        data['active_roots_count'] = response3['node']['active']['roots']['count']
-        data['active_blocks_count'] = response3['node']['active']['blocks']['count']
-        data['active_confirmed_count'] = response3['node']['active']['confirmed']['count']
-        data['active_cementable_count'] = response3['node']['active']['priority_cementable_frontiers_count']['count']
-        data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
-        data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
-        data['response_channels_count'] = response3['node']['response_channels']['channels']['count']
-        data['vote_processor_count'] = response3['node']['vote_processor']['votes']['count']
-        data['vote_processor_rep1'] = response3['node']['vote_processor']['representatives_1']['count']
-        data['vote_processor_rep2'] = response3['node']['vote_processor']['representatives_2']['count']
-        data['vote_processor_rep3'] = response3['node']['vote_processor']['representatives_3']['count']
-        data['block_processor_state'] = response3['node']['block_processor']['state_blocks']['count']
-        data['block_processor_blocks'] = response3['node']['block_processor']['blocks']['count']
-        data['block_processor_hashes'] = response3['node']['block_processor']['blocks_hashes']['count']
-        data['block_processor_forced'] = response3['node']['block_processor']['forced']['count']
-        data['block_processor_rolled_back'] = response3['node']['block_processor']['rolled_back']['count']
-        data['block_processor_generator'] = response3['node']['block_processor']['generator']['state_blocks']['count']
-        data['block_arrival_count'] = response3['node']['block_arrival']['arrival']['count']
-        data['online_reps_arrival_count'] = response3['node']['online_reps']['arrival']['count']
-        data['votes_cache_count'] = response3['node']['votes_cache']['cache']['count']
-        data['block_uniquer_count'] = response3['node']['block_uniquer']['blocks']['count']
-        data['vote_uniquer_count'] = response3['node']['vote_uniquer']['votes']['count']
-        data['confirmation_height_count'] = response3['node']['pending_confirmation_height']['pending']['count']
-        data['block_count'] = response4['count']
-        data['unchecked_count'] = response4['unchecked']
-        data['cemented_count'] = response4['cemented']
-        data['quorum_delta'] = response5['quorum_delta']
-        data['online_weight_minimum'] = response5['online_weight_minimum']
-        data['online_stake_total'] = response5['online_stake_total']
-        data['peers_stake_total'] = response5['peers_stake_total']
-        data['peers_stake_required'] = response5['peers_stake_required']
-        if 'clients' in response6:
-            data['bootstrap_clients'] = response6['clients']
-            data['bootstrap_pulls'] = response6['pulls']
-            data['bootstrap_pulling'] = response6['pulling']
-            data['bootstrap_connections'] = response6['connections']
-            data['bootstrap_target_connections'] = response6['target_connections']
-            data['bootstrap_total_blocks'] = response6['total_blocks']
-            data['bootstrap_lazy_pulls'] = response6['lazy_pulls']
-        else:
-            data['bootstrap_clients'] = '0'
-            data['bootstrap_pulls'] = '0'
-            data['bootstrap_pulling'] = '0'
-            data['bootstrap_connections'] = '0'
-            data['bootstrap_target_connections'] = '0'
-            data['bootstrap_total_blocks'] = '0'
-            data['bootstrap_lazy_pulls'] = '0'
-        json_data.append(data)
-#        except Exception as e: print(e)
+        try:
+            data = {}
+            data['timestamp'] = str(time.time())
+            data['confirmation_active'] = str(len(response2['confirmations']))
+            data['network_minimum'] = response['network_minimum']
+            data['network_current'] = response['network_current']
+            data['multiplier'] = response['multiplier']
+            data['difficulty_trend_min'] = str(min(map(float,response['difficulty_trend'])))
+            data['difficulty_trend_max'] = str(max(map(float,response['difficulty_trend'])))
+            data['difficulty_trend_median'] = str(statistics.median(map(float,response['difficulty_trend'])))
+            data['difficulty_trend_mean'] = str(statistics.mean(map(float,response['difficulty_trend'])))
+            try:
+                data['difficulty_trend_mode'] = str(statistics.mode(map(float,response['difficulty_trend'])))
+            except:
+                print('Mode Error - returning mean as mode')
+                data['difficulty_trend_mode'] = str(statistics.mean(map(float,response['difficulty_trend'])))
+            data['alarm_operations_count'] = response3['node']['alarm']['operations']['count']
+            data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
+            data['active_roots_count'] = response3['node']['active']['roots']['count']
+            data['active_blocks_count'] = response3['node']['active']['blocks']['count']
+            data['active_confirmed_count'] = response3['node']['active']['confirmed']['count']
+            data['active_cementable_count'] = response3['node']['active']['priority_cementable_frontiers_count']['count']
+            data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
+            data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
+            data['response_channels_count'] = response3['node']['response_channels']['channels']['count']
+            data['vote_processor_count'] = response3['node']['vote_processor']['votes']['count']
+            data['vote_processor_rep1'] = response3['node']['vote_processor']['representatives_1']['count']
+            data['vote_processor_rep2'] = response3['node']['vote_processor']['representatives_2']['count']
+            data['vote_processor_rep3'] = response3['node']['vote_processor']['representatives_3']['count']
+            data['block_processor_state'] = response3['node']['block_processor']['state_blocks']['count']
+            data['block_processor_blocks'] = response3['node']['block_processor']['blocks']['count']
+            data['block_processor_hashes'] = response3['node']['block_processor']['blocks_hashes']['count']
+            data['block_processor_forced'] = response3['node']['block_processor']['forced']['count']
+            data['block_processor_rolled_back'] = response3['node']['block_processor']['rolled_back']['count']
+            data['block_processor_generator'] = response3['node']['block_processor']['generator']['state_blocks']['count']
+            data['block_arrival_count'] = response3['node']['block_arrival']['arrival']['count']
+            data['online_reps_arrival_count'] = response3['node']['online_reps']['arrival']['count']
+            data['votes_cache_count'] = response3['node']['votes_cache']['cache']['count']
+            data['block_uniquer_count'] = response3['node']['block_uniquer']['blocks']['count']
+            data['vote_uniquer_count'] = response3['node']['vote_uniquer']['votes']['count']
+            data['confirmation_height_count'] = response3['node']['pending_confirmation_height']['pending']['count']
+            data['block_count'] = response4['count']
+            data['unchecked_count'] = response4['unchecked']
+            data['cemented_count'] = response4['cemented']
+            data['quorum_delta'] = response5['quorum_delta']
+            data['online_weight_minimum'] = response5['online_weight_minimum']
+            data['online_stake_total'] = response5['online_stake_total']
+            data['peers_stake_total'] = response5['peers_stake_total']
+            data['peers_stake_required'] = response5['peers_stake_required']
+            if 'clients' in response6:
+                data['bootstrap_clients'] = response6['clients']
+                data['bootstrap_pulls'] = response6['pulls']
+                data['bootstrap_pulling'] = response6['pulling']
+                data['bootstrap_connections'] = response6['connections']
+                data['bootstrap_target_connections'] = response6['target_connections']
+                data['bootstrap_total_blocks'] = response6['total_blocks']
+                data['bootstrap_lazy_pulls'] = response6['lazy_pulls']
+            else:
+                data['bootstrap_clients'] = '0'
+                data['bootstrap_pulls'] = '0'
+                data['bootstrap_pulling'] = '0'
+                data['bootstrap_connections'] = '0'
+                data['bootstrap_target_connections'] = '0'
+                data['bootstrap_total_blocks'] = '0'
+                data['bootstrap_lazy_pulls'] = '0'
+            json_data.append(data)
+        except Exception as e: print(e)
 #            print('\nAn error occurred getting data')
         if loop_count%(round(args.save/args.delay)) == 0:
             writeBkup()
