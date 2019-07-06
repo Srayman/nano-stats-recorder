@@ -105,11 +105,6 @@ async def main():
             data['difficulty_trend_max'] = str(max(map(float,response['difficulty_trend'])))
             data['difficulty_trend_median'] = str(statistics.median(map(float,response['difficulty_trend'])))
             data['difficulty_trend_mean'] = str(statistics.mean(map(float,response['difficulty_trend'])))
-            try:
-                data['difficulty_trend_mode'] = str(statistics.mode(map(float,response['difficulty_trend'])))
-            except:
-                print('Mode Error - returning mean as mode')
-                data['difficulty_trend_mode'] = str(statistics.mean(map(float,response['difficulty_trend'])))
             data['alarm_operations_count'] = response3['node']['alarm']['operations']['count']
             data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
             data['active_roots_count'] = response3['node']['active']['roots']['count']
