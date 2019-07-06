@@ -11,6 +11,7 @@ import requests
 import json
 import time
 import datetime
+import statistics
 from collections import defaultdict
 from sys import exit
 from time import sleep
@@ -58,7 +59,7 @@ async def main():
     print("Connecting to: "+URL)
 
     # defining a params dict for the parameters to be sent to the API 
-    data1 = {'action':'active_difficulty'}
+    data1 = {'action':'active_difficulty','include_trend': 'true'}
     data2 = {'action':'confirmation_active'}
     data3 = {'action':'stats','type':'objects'}
     data4 = {'action':'block_count','include_cemented':'true'}
@@ -100,6 +101,9 @@ async def main():
         data['network_minimum'] = response['network_minimum']
         data['network_current'] = response['network_current']
         data['multiplier'] = response['multiplier']
+        data['difficulty_trend_min'] = str(min(map(float,response['difficulty_trend'])))
+        data['difficulty_trend_max'] = str(max(map(float,response['difficulty_trend'])))
+        data['difficulty_trend_median'] = str(statistics.median(map(float,response['difficulty_trend'])))
         data['alarm_operations_count'] = response3['node']['alarm']['operations']['count']
         data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
         data['active_roots_count'] = response3['node']['active']['roots']['count']
