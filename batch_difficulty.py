@@ -45,29 +45,24 @@ def get_batch(all_multipliers: dict, node: str, block_hashes: list):
         all_multipliers[h] = work_multiplier(work_value(work, previous))
 
 def main(node, file):
-
-    try:
-        os.rename('multipliers.json','multipliers.json.'+datetime.utcnow().strftime("%Y%m%d%H%M%S"))
-        print('Renaming multipliers.json ...')
-    except:
-        print('multipliers.json does not exist, create new file ...')
-
+    outfile = 'multipliers_'+file[-15:]
+    print('Start - '+datetime.utcnow().strftime("%Y%m%d%H%M%S"))
     with open(file, 'r') as f:
         blocks = json.load(f)
     all_hashes = [d['hash'] for d in blocks]
 
     all_multipliers = dict()
-    split = 100000
+    split = 10000
     chunks = [all_hashes[x:x+split] for x in range(0, len(all_hashes), split)]
     print("{} chunks of {}...".format(len(chunks), split))
     for i, hashes in enumerate(chunks):
         print(i+1, end='...', flush=True)
         get_batch(all_multipliers, node, hashes)
-        print('done')
+        print('Done - '+datetime.utcnow().strftime("%Y%m%d%H%M%S"))
 
-    with open('multipliers.json', 'w') as f:
+    with open(outfile, 'w') as f:
         json.dump(all_multipliers, f)
-    print("Saved to multipliers.json")
+    print("Saved to "+outfile)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

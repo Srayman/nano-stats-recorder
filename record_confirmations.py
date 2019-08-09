@@ -15,6 +15,7 @@ from collections import defaultdict
 from sys import exit
 from time import sleep
 from datetime import datetime
+from datetime import timedelta
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-host', '--node_url', type=str, help='Nano node url', default='localhost')
@@ -26,7 +27,7 @@ args = parser.parse_args()
 json_data = []
 hashes = []
 distinct = []
-timeString = datetime.utcnow().strftime("%Y-%m-%d")
+timeString = (datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")
 filename = 'confirmation_history_'+timeString+'.json'
 #Rename existing file
 try:
@@ -65,13 +66,13 @@ async def main():
     data = {'action':'confirmation_history'} 
 
     while 1:
-        filename2 = 'confirmation_history_'+datetime.utcnow().strftime("%Y-%m-%d")+'.json'
+        filename2 = 'confirmation_history_'+(datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")+'.json'
         if filename2 != filename:
             writeBkup()
             writeString = timeString+'|'+str(len(json_data))+'\n'
             with open('files.txt', 'a') as files:
                 files.write(writeString)
-            timeString = datetime.utcnow().strftime("%Y-%m-%d")
+            timeString = (datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")
             json_data = []
             filename = filename2
         loop_count += 1
