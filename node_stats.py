@@ -25,7 +25,7 @@ parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seco
 args = parser.parse_args()
 
 json_data = []
-timeString = (datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")
+timeString = (datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")
 filename = 'stats_'+timeString+'.json'
 #Rename existing file
 try:
@@ -67,10 +67,10 @@ async def main():
     data6 = {'action':'bootstrap_status'}
 
     while 1:
-        filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")+'.json'
+        filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")+'.json'
         if filename2 != filename:
             writeBkup()
-            timeString = (datetime.utcnow() + timedelta(hours=2)).strftime("%Y-%m-%d")
+            timeString = (datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")
             json_data = []
             filename = filename2
         loop_count += 1
