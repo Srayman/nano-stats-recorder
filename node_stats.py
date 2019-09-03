@@ -65,6 +65,7 @@ async def main():
     data4 = {'action':'block_count','include_cemented':'true'}
     data5 = {'action':'confirmation_quorum'}
     data6 = {'action':'bootstrap_status'}
+    data7 = {'action':'stats','type':'counters'}
 
     while 1:
         filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")+'.json'
@@ -83,6 +84,7 @@ async def main():
             r4 = requests.post(url = URL, json = data4)
             r5 = requests.post(url = URL, json = data5)
             r6 = requests.post(url = URL, json = data6)
+            r7 = requests.post(url = URL, json = data7)
             # extracting data in json format 
             response = r.json()
             response2 = r2.json()
@@ -90,6 +92,7 @@ async def main():
             response4 = r4.json()
             response5 = r5.json()
             response6 = r6.json()
+            response7 = r7.json()
         except:
             print("Error connecting to RPC server. Make sure you have enabled it in ~/Nano/config.json and check "
           "./sample_client.py --help")
@@ -106,11 +109,15 @@ async def main():
             data['difficulty_trend_median'] = str(statistics.median(map(float,response['difficulty_trend'])))
             data['difficulty_trend_mean'] = str(statistics.mean(map(float,response['difficulty_trend'])))
             data['alarm_operations_count'] = response3['node']['alarm']['operations']['count']
+            data['work_pending_count'] = response3['node']['work']['pending']['count']
+            data['work_observers_count'] = response3['node']['work']['work_observers']['observers']['count']
+            data['gap_cache_count'] = response3['node']['gap_cache']['blocks']['count']
             data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
             data['active_roots_count'] = response3['node']['active']['roots']['count']
             data['active_blocks_count'] = response3['node']['active']['blocks']['count']
             data['active_confirmed_count'] = response3['node']['active']['confirmed']['count']
             data['active_cementable_count'] = response3['node']['active']['priority_cementable_frontiers_count']['count']
+            data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
             data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
             data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
             data['response_channels_count'] = response3['node']['response_channels']['channels']['count']
@@ -154,6 +161,8 @@ async def main():
                 data['bootstrap_target_connections'] = '0'
                 data['bootstrap_total_blocks'] = '0'
                 data['bootstrap_lazy_pulls'] = '0'
+            data['stats_counters'] = response7['entries']
+            data['stats_duration'] = response7['stat_duration_seconds']
             json_data.append(data)
         except Exception as e: print(e)
 #            print('\nAn error occurred getting data')
