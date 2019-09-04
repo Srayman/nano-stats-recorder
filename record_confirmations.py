@@ -22,6 +22,7 @@ parser.add_argument('-host', '--node_url', type=str, help='Nano node url', defau
 parser.add_argument('-port', '--node_port', type=str, help='Nano node port', default='55000')
 parser.add_argument('-save', '--save', type=int, help='Save blocks to disk how often (in seconds) should be multiple of --delay', default=60)
 parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seconds)', default=10)
+parser.add_argument('-timeout', '--timeout', type=float, help='rpc request timeout (in seconds)', default=30)
 args = parser.parse_args()
 
 json_data = []
@@ -79,7 +80,7 @@ async def main():
         currentTime = time.time()
         # sending get request and saving the response as response object 
         try:
-            r = requests.post(url = URL, json = data) 
+            r = requests.post(url = URL, json = data, timeout=args.timeout) 
         
             # extracting data in json format 
             response = r.json()

@@ -22,6 +22,7 @@ parser.add_argument('-host', '--node_url', type=str, help='Nano node url', defau
 parser.add_argument('-port', '--node_port', type=str, help='Nano node port', default='55000')
 parser.add_argument('-save', '--save', type=int, help='Save blocks to disk how often (in seconds) should be multiple of --delay', default=180)
 parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seconds)', default=15)
+parser.add_argument('-timeout', '--timeout', type=float, help='rpc request timeout (in seconds)', default=10)
 args = parser.parse_args()
 
 json_data = []
@@ -78,13 +79,13 @@ async def main():
         currentTime = time.time()
         # sending get request and saving the response as response object 
         try:
-            r = requests.post(url = URL, json = data1)
-            r2 = requests.post(url = URL, json = data2)
-            r3 = requests.post(url = URL, json = data3)
-            r4 = requests.post(url = URL, json = data4)
-            r5 = requests.post(url = URL, json = data5)
-            r6 = requests.post(url = URL, json = data6)
-            r7 = requests.post(url = URL, json = data7)
+            r = requests.post(url = URL, json = data1, timeout=args.timeout)
+            r2 = requests.post(url = URL, json = data2, timeout=args.timeout)
+            r3 = requests.post(url = URL, json = data3, timeout=args.timeout)
+            r4 = requests.post(url = URL, json = data4, timeout=args.timeout)
+            r5 = requests.post(url = URL, json = data5, timeout=args.timeout)
+            r6 = requests.post(url = URL, json = data6, timeout=args.timeout)
+            r7 = requests.post(url = URL, json = data7, timeout=args.timeout)
             # extracting data in json format 
             response = r.json()
             response2 = r2.json()
@@ -94,8 +95,8 @@ async def main():
             response6 = r6.json()
             response7 = r7.json()
         except:
-            print("Error connecting to RPC server. Make sure you have enabled it in ~/Nano/config.json and check "
-          "./sample_client.py --help")
+            print("Error connecting to RPC server. Make sure you have enabled it in ~/Nano/config-node.toml and check "
+          "./node_stats.py --help")
 #        print(response2)
         try:
             data = {}
