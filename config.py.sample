@@ -8,8 +8,10 @@ dpow_enable = 'false'
 dpow_url = ''
 dpow_api_key = ''
 dpow_user = ''
+upload_user = 
+upload_key = 
 #BETA
-betamonitor = ''
+betamonitor = 'nano_19fm1ghgf6adogakszxjh1bq3sc61xsyudsn4wugxaudsinr5ot6dr5umqyf'
 betawallet = ''
 betaaccount = ''
 #LIVE
