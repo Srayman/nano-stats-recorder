@@ -11,6 +11,8 @@ import requests
 import json
 import time
 import datetime
+import upload
+import config
 from collections import defaultdict
 from sys import exit
 from time import sleep
@@ -70,6 +72,8 @@ async def main():
         filename2 = 'confirmation_history_'+(datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")+'.json'
         if filename2 != filename:
             writeBkup()
+            if config.upload == 'true':
+                upload.upload(filename)
             writeString = timeString+'|'+str(len(json_data))+'\n'
             with open('files.txt', 'a') as files:
                 files.write(writeString)

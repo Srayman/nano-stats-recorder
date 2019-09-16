@@ -11,6 +11,8 @@ import requests
 import time
 import datetime
 import statistics
+import upload
+import config
 from collections import defaultdict
 from sys import exit
 from time import sleep
@@ -72,6 +74,8 @@ async def main():
         filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")+'.json'
         if filename2 != filename:
             writeBkup()
+            if config.upload == 'true':
+                upload.upload(filename)
             timeString = (datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")
             json_data = []
             filename = filename2

@@ -8,6 +8,7 @@ dpow_enable = 'false'
 dpow_url = ''
 dpow_api_key = ''
 dpow_user = ''
+upload = 'false'
 upload_user = 
 upload_key = 
 #BETA
