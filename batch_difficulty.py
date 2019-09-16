@@ -10,7 +10,7 @@ from binascii import hexlify, unhexlify
 
 
 def work_multiplier(difficulty: int):
-    return float((1 << 64) - 0xffffffc000000000) / float((1 << 64) - difficulty)
+    return float((1 << 64) - 0xfffffc0000000000) / float((1 << 64) - difficulty)
 
 
 def work_value(work: str, block_hash: str):
