@@ -52,6 +52,10 @@ votes = defaultdict(lambda: [0]*VOTE_BY_HASH_MAX)
 VOTE_COUNT_MAX = 200
 counts = defaultdict(lambda: [0]*VOTE_COUNT_MAX)
 
+print("################################################")
+print("#       TO QUIT - USE CTRL-C ONLY ONCE         #")
+print("# THEN WAIT SEVERAL SECONDS FOR FILES TO WRITE #")
+print("################################################")
 #Rename existing file
 try:
     os.rename('votes.json','votes.json.'+datetime.utcnow().strftime("%Y%m%d%H%M%S"))
@@ -95,7 +99,7 @@ def blockcreate(account, representative, balance, link, previous, work):
     return {'action':'block_create', 'type':'state', 'balance':balance, 'wallet':wallet, 'account':account, 'representative':representative, 'link':link, 'previous':previous, 'work':work}
 
 def process(block):
-    return {'action':'process', 'block':block}
+    return {'action':'process', 'block':block, 'watch_work':'false'}
     
 def republish(hash):
     return {'action':'republish', 'hash':hash}
@@ -116,7 +120,7 @@ def workget(account):
     return {'action':'work_get', 'wallet':wallet, 'account':account}
     
 def workgenerate(hash,account):
-    return {'action':'work_generate', 'hash':hash}
+    return {'action':'work_generate', 'hash':hash, 'use_peers':'false'}
     
 def dpowworkget(hash, account):
     return {'hash':hash, 'user':config.dpow_user, 'api_key':config.dpow_api_key, 'account':account}
@@ -142,7 +146,7 @@ class VoteAnalysis():
         self.hashes = []
         self.confirmedHashes = []
         self.block_data = defaultdict(dict)
-        self.hash = None
+        self.hash = ''
         self.work = None
         self.balance = None
         self.pending = None
@@ -184,9 +188,10 @@ class VoteAnalysis():
         block_count = 0
         while 1:
             self.timestamp = math.floor(time.time()*1000)
-            if len(self.hashes) > block_count or len(self.vote_data) > 1000:
+            if len(self.hashes) > block_count or len(self.vote_data) > 10000:
                 block_count = len(self.hashes)
-                self.hash = self.hashes[-1]
+                if len(self.hashes) >= 1:
+                    self.hash = self.hashes[-1]
                 self.writeBkup()
             else:
                 print("Hash Not Confirmed")
@@ -271,8 +276,8 @@ class VoteAnalysis():
 #                                print(res_js)
                 except Exception as e: 
                     print("Error Sending or Receiving")
-#                    print(traceback.format_exc())
-#                    print(res_js)
+                    print(traceback.format_exc())
+                    print(res_js)
                 print(str(time.time())+" - Hash: "+self.hash)
             else:
                 print("Hash Not Confirmed")
@@ -331,6 +336,8 @@ class VoteAnalysis():
                             data['confirmation_type'] = message['confirmation_type']
                             self.conf_data.append(data)
                             self.confirmedHashes.append(message['hash'])
+                            if args.send != 'true':
+                                self.hashes.append(message['hash'])
                             print("{} - {} blocks sent".format(str(time.time()), len(self.hashes)))
                             print("{} - {} blocks confirmed".format(str(time.time()), len(self.conf_data))) 
                 except Exception as e:
