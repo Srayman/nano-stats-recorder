@@ -27,8 +27,9 @@ parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seco
 parser.add_argument('-timeout', '--timeout', type=float, help='rpc request timeout (in seconds)', default=60)
 args = parser.parse_args()
 
+timechange = 0
 json_data = []
-timeString = (datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")
+timeString = (datetime.utcnow() + timedelta(hours=timechange)).strftime("%Y-%m-%d")
 filename = 'stats_'+timeString+'.json'
 #Rename existing file
 try:
@@ -71,12 +72,12 @@ async def main():
     data7 = {'action':'stats','type':'counters'}
 
     while 1:
-        filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")+'.json'
+        filename2 = 'stats_'+(datetime.utcnow() + timedelta(hours=timechange)).strftime("%Y-%m-%d")+'.json'
         if filename2 != filename:
             writeBkup()
             if config.upload == 'true':
                 upload.upload(filename)
-            timeString = (datetime.utcnow() + timedelta(hours=0)).strftime("%Y-%m-%d")
+            timeString = (datetime.utcnow() + timedelta(hours=timechange)).strftime("%Y-%m-%d")
             json_data = []
             filename = filename2
         loop_count += 1
@@ -120,11 +121,12 @@ async def main():
             data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
             data['active_roots_count'] = response3['node']['active']['roots']['count']
             data['active_blocks_count'] = response3['node']['active']['blocks']['count']
+            data['pending_conf_height_count'] = response3['node']['active']['pending_conf_height']['count']
             data['active_confirmed_count'] = response3['node']['active']['confirmed']['count']
             data['active_cementable_count'] = response3['node']['active']['priority_cementable_frontiers_count']['count']
-            data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
-            data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
-            data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
+#            data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
+#            data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
+#            data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
             data['vote_processor_count'] = response3['node']['vote_processor']['votes']['count']
             data['vote_processor_rep1'] = response3['node']['vote_processor']['representatives_1']['count']
             data['vote_processor_rep2'] = response3['node']['vote_processor']['representatives_2']['count']
@@ -133,7 +135,7 @@ async def main():
             data['block_processor_blocks'] = response3['node']['block_processor']['blocks']['count']
 #            data['block_processor_hashes'] = response3['node']['block_processor']['blocks_hashes']['count']
             data['block_processor_forced'] = response3['node']['block_processor']['forced']['count']
-            data['block_processor_rolled_back'] = response3['node']['block_processor']['rolled_back']['count']
+#            data['block_processor_rolled_back'] = response3['node']['block_processor']['rolled_back']['count']
             data['block_processor_generator'] = response3['node']['block_processor']['generator']['state_blocks']['count']
             data['block_arrival_count'] = response3['node']['block_arrival']['arrival']['count']
             data['online_reps_arrival_count'] = response3['node']['online_reps']['arrival']['count']
@@ -157,6 +159,7 @@ async def main():
                 data['bootstrap_target_connections'] = response6['target_connections']
                 data['bootstrap_total_blocks'] = response6['total_blocks']
                 data['bootstrap_lazy_pulls'] = response6['lazy_pulls']
+                data['bootstrap_lazy_blocks'] = response6['lazy_blocks']
             else:
                 data['bootstrap_clients'] = '0'
                 data['bootstrap_pulls'] = '0'
@@ -165,6 +168,7 @@ async def main():
                 data['bootstrap_target_connections'] = '0'
                 data['bootstrap_total_blocks'] = '0'
                 data['bootstrap_lazy_pulls'] = '0'
+                data['bootstrap_lazy_blocks'] = '0'
             data['stats_counters'] = response7['entries']
             data['stats_duration'] = response7['stat_duration_seconds']
             json_data.append(data)
