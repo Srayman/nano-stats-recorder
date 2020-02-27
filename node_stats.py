@@ -121,10 +121,10 @@ async def main():
             data['ledger_bootstrap_weights_count'] = response3['node']['ledger']['bootstrap_weights']['count']
             data['active_roots_count'] = response3['node']['active']['roots']['count']
             data['active_blocks_count'] = response3['node']['active']['blocks']['count']
-            data['pending_conf_height_count'] = response3['node']['active']['pending_conf_height']['count']
+#            data['pending_conf_height_count'] = response3['node']['active']['pending_conf_height']['count']
             data['active_confirmed_count'] = response3['node']['active']['confirmed']['count']
             data['active_cementable_count'] = response3['node']['active']['priority_cementable_frontiers_count']['count']
-#            data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
+            data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
 #            data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
 #            data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
             data['vote_processor_count'] = response3['node']['vote_processor']['votes']['count']
@@ -142,7 +142,7 @@ async def main():
             data['votes_cache_count'] = response3['node']['votes_cache']['cache']['count']
             data['block_uniquer_count'] = response3['node']['block_uniquer']['blocks']['count']
             data['vote_uniquer_count'] = response3['node']['vote_uniquer']['votes']['count']
-            data['confirmation_height_count'] = response3['node']['pending_confirmation_height']['pending']['count']
+            data['confirmation_height_count'] = response3['node']['confirmation_height_processor']['awaiting_processing']['count']
             data['block_count'] = response4['count']
             data['unchecked_count'] = response4['unchecked']
             data['cemented_count'] = response4['cemented']
@@ -172,8 +172,10 @@ async def main():
             data['stats_counters'] = response7['entries']
             data['stats_duration'] = response7['stat_duration_seconds']
             json_data.append(data)
-        except Exception as e: print(e)
-#            print('\nAn error occurred getting data')
+        except Exception as e: 
+            print('\nAn error occurred getting data')
+            print('Missing Field: '+str(e))
+            print('Fix stats collection and restart\n')
         if loop_count%(round(args.save/args.delay)) == 0:
             writeBkup()
         endTime = time.time()
