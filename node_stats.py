@@ -131,7 +131,7 @@ async def main():
             data['vote_processor_rep1'] = response3['node']['vote_processor']['representatives_1']['count']
             data['vote_processor_rep2'] = response3['node']['vote_processor']['representatives_2']['count']
             data['vote_processor_rep3'] = response3['node']['vote_processor']['representatives_3']['count']
-            data['block_processor_state'] = response3['node']['block_processor']['state_blocks']['count']
+            data['block_processor_state'] = response3['node']['block_processor']['state_block_signature_verification']['state_blocks']['count']
             data['block_processor_blocks'] = response3['node']['block_processor']['blocks']['count']
 #            data['block_processor_hashes'] = response3['node']['block_processor']['blocks_hashes']['count']
             data['block_processor_forced'] = response3['node']['block_processor']['forced']['count']
