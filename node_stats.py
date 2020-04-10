@@ -128,6 +128,7 @@ async def main():
             data['inactive_votes_cache_count'] = response3['node']['active']['inactive_votes_cache_count']['count']
 #            data['tcp_channels_count'] = response3['node']['tcp_channels']['channels']['count']
 #            data['tcp_channels_attempts_count'] = response3['node']['tcp_channels']['attempts']['count']
+            data['excluded_peers'] = response3['node']['network']['excluded_peers']['peers']['count']
             data['vote_processor_count'] = response3['node']['vote_processor']['votes']['count']
             data['vote_processor_rep1'] = response3['node']['vote_processor']['representatives_1']['count']
             data['vote_processor_rep2'] = response3['node']['vote_processor']['representatives_2']['count']
