@@ -140,7 +140,7 @@ async def main():
 #            data['block_processor_rolled_back'] = response3['node']['block_processor']['rolled_back']['count']
 #            data['block_processor_generator'] = response3['node']['block_processor']['generator']['state_blocks']['count']
             data['block_arrival_count'] = response3['node']['block_arrival']['arrival']['count']
-            data['online_reps_arrival_count'] = response3['node']['online_reps']['arrival']['count']
+            data['online_reps_arrival_count'] = response3['node']['online_reps']['reps']['count']
             data['votes_cache_count'] = response3['node']['votes_cache']['cache']['count']
             data['block_uniquer_count'] = response3['node']['block_uniquer']['blocks']['count']
             data['vote_uniquer_count'] = response3['node']['vote_uniquer']['votes']['count']
