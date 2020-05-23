@@ -145,6 +145,7 @@ async def main():
             data['block_uniquer_count'] = response3['node']['block_uniquer']['blocks']['count']
             data['vote_uniquer_count'] = response3['node']['vote_uniquer']['votes']['count']
             data['confirmation_height_count'] = response3['node']['confirmation_height_processor']['awaiting_processing']['count']
+            data['worker_queue_count'] = response3['node']['worker']['queue']['count']
             data['request_aggregator_pools'] = response3['node']['request_aggregator']['pools']['count']
             data['block_count'] = response4['count']
             data['unchecked_count'] = response4['unchecked']
