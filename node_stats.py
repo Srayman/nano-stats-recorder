@@ -25,6 +25,7 @@ parser.add_argument('-port', '--node_port', type=str, help='Nano node port', def
 parser.add_argument('-save', '--save', type=int, help='Save blocks to disk how often (in seconds) should be multiple of --delay', default=180)
 parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seconds)', default=15)
 parser.add_argument('-timeout', '--timeout', type=float, help='rpc request timeout (in seconds)', default=60)
+parser.add_argument('-bootstrap', '--bootstrap', type=str, help='Collect bootstrap stats', default='false')
 args = parser.parse_args()
 
 timechange = 0
@@ -155,24 +156,77 @@ async def main():
             data['online_stake_total'] = response5['online_stake_total']
             data['peers_stake_total'] = response5['peers_stake_total']
             data['peers_stake_required'] = response5['peers_stake_required']
-            if 'clients' in response6:
-                data['bootstrap_clients'] = response6['clients']
-                data['bootstrap_pulls'] = response6['pulls']
-                data['bootstrap_pulling'] = response6['pulling']
-                data['bootstrap_connections'] = response6['connections']
-                data['bootstrap_target_connections'] = response6['target_connections']
-                data['bootstrap_total_blocks'] = response6['total_blocks']
-                data['bootstrap_lazy_pulls'] = response6['lazy_pulls']
-                data['bootstrap_lazy_blocks'] = response6['lazy_blocks']
-            else:
-                data['bootstrap_clients'] = '0'
-                data['bootstrap_pulls'] = '0'
-                data['bootstrap_pulling'] = '0'
-                data['bootstrap_connections'] = '0'
-                data['bootstrap_target_connections'] = '0'
-                data['bootstrap_total_blocks'] = '0'
-                data['bootstrap_lazy_pulls'] = '0'
-                data['bootstrap_lazy_blocks'] = '0'
+            if args.bootstrap == 'true':
+               if 'bootstrap_threads' in response6:
+                   data['bootstrap_threads'] = response6['bootstrap_threads']
+                   data['bootstrap_running_attempts'] = response6['running_attempts_count']
+                   data['bootstrap_total_attempts'] = response6['total_attempts_count']
+                   data['bootstrap_clients'] = response6['connections']['clients']
+                   data['bootstrap_connections'] = response6['connections']['connections']
+                   data['bootstrap_target_connections'] = response6['connections']['target_connections']
+                   data['bootstrap_pulls'] = response6['connections']['pulls']
+                   if len(response6['attempts']) > 0:
+                      data['bootstrap_pulling'] = response6['attempts'][0]['pulling']
+                      data['bootstrap_total_blocks'] = response6['attempts'][0]['total_blocks']
+                      data['bootstrap_duration'] = response6['attempts'][0]['duration']
+                      data['bootstrap_requeued_pulls'] = response6['attempts'][0]['requeued_pulls']
+                      if response6['attempts'][0]['mode'] == 'lazy':
+                         data['bootstrap_lazy_blocks'] = response6['attempts'][0]['lazy_blocks']
+                         data['bootstrap_lazy_state_backlog'] = response6['attempts'][0]['lazy_state_backlog']
+                         data['bootstrap_lazy_balances'] = response6['attempts'][0]['lazy_balances']
+                         data['bootstrap_lazy_destinations'] = response6['attempts'][0]['lazy_destinations']
+                         data['bootstrap_lazy_undefined_links'] = response6['attempts'][0]['lazy_undefined_links']
+                         data['bootstrap_lazy_pulls'] = response6['attempts'][0]['lazy_pulls']
+                         data['bootstrap_lazy_keys'] = response6['attempts'][0]['lazy_keys']
+                      else:
+                         data['bootstrap_frontier_pulls'] = response6['attempts'][0]['frontier_pulls']
+                   if len(response6['attempts']) > 1:
+                      data['bootstrap_pulling_1'] = response6['attempts'][1]['pulling']
+                      data['bootstrap_total_blocks_1'] = response6['attempts'][1]['total_blocks']
+                      data['bootstrap_duration_1'] = response6['attempts'][1]['duration']
+                      data['bootstrap_requeued_pulls_1'] = response6['attempts'][1]['requeued_pulls']
+                      if response6['attempts'][1]['mode'] == 'lazy':
+                         data['bootstrap_lazy_blocks_1'] = response6['attempts'][1]['lazy_blocks']
+                         data['bootstrap_lazy_state_backlog_1'] = response6['attempts'][1]['lazy_state_backlog']
+                         data['bootstrap_lazy_balances_1'] = response6['attempts'][1]['lazy_balances']
+                         data['bootstrap_lazy_destinations_1'] = response6['attempts'][1]['lazy_destinations']
+                         data['bootstrap_lazy_undefined_links_1'] = response6['attempts'][1]['lazy_undefined_links']
+                         data['bootstrap_lazy_pulls_1'] = response6['attempts'][1]['lazy_pulls']
+                         data['bootstrap_lazy_keys_1'] = response6['attempts'][1]['lazy_keys']
+                      else:
+                         data['bootstrap_frontier_pulls_1'] = response6['attempts'][1]['frontier_pulls']
+               else:
+                   data['bootstrap_threads'] = '0'
+                   data['bootstrap_running_attempts'] = '0'
+                   data['bootstrap_total_attempts'] = '0'
+                   data['bootstrap_clients'] = '0'
+                   data['bootstrap_connections'] = '0'
+                   data['bootstrap_target_connections'] = '0'
+                   data['bootstrap_pulls'] = '0'
+                   data['bootstrap_pulling'] = '0'
+                   data['bootstrap_total_blocks'] = '0'
+                   data['bootstrap_duration'] = '0'
+                   data['bootstrap_requeued_pulls'] = '0'
+                   data['bootstrap_frontier_pulls'] = '0'
+                   data['bootstrap_lazy_blocks'] = '0'
+                   data['bootstrap_lazy_state_backlog'] = '0'
+                   data['bootstrap_lazy_balances'] = '0'
+                   data['bootstrap_lazy_destinations'] = '0'
+                   data['bootstrap_lazy_undefined_links'] = '0'
+                   data['bootstrap_lazy_pulls'] = '0'
+                   data['bootstrap_lazy_keys'] = '0'
+                   data['bootstrap_pulling_1'] = '0'
+                   data['bootstrap_total_blocks_1'] = '0'
+                   data['bootstrap_duration_1'] = '0'
+                   data['bootstrap_requeued_pulls_1'] = '0'
+                   data['bootstrap_frontier_pulls_1'] = '0'
+                   data['bootstrap_lazy_blocks_1'] = '0'
+                   data['bootstrap_lazy_state_backlog_1'] = '0'
+                   data['bootstrap_lazy_balances_1'] = '0'
+                   data['bootstrap_lazy_destinations_1'] = '0'
+                   data['bootstrap_lazy_undefined_links_1'] = '0'
+                   data['bootstrap_lazy_pulls_1'] = '0'
+                   data['bootstrap_lazy_keys_1'] = '0'
             data['stats_counters'] = response7['entries']
             data['stats_duration'] = response7['stat_duration_seconds']
             json_data.append(data)

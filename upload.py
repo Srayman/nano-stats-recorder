@@ -11,6 +11,7 @@ parser.add_argument('-save', '--save', type=int, help='Save blocks to disk how o
 parser.add_argument('-delay', '--delay', type=int, help='recorder delay (in seconds)', default=15)
 parser.add_argument('-timeout', '--timeout', type=float, help='rpc request timeout (in seconds)', default=60)
 parser.add_argument('-file', '--file', type=str, help='Filename to upload', default='')
+parser.add_argument('-bootstrap', '--bootstrap', type=str, help='Collect bootstrap stats', default='false')
 args = parser.parse_args()
 
 def upload(file):
